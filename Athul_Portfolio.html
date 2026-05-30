@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Athul · Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+/* ============================================================
+   ATHUL PORTFOLIO — DEEP SPACE NOIR × ELECTRIC VIOLET
+   Aesthetic: Editorial magazine meets dark sci-fi
+   Fonts: Playfair Display (display) + Space Mono (mono) + Manrope (body)
+============================================================ */
+
+:root {
+  --void:        #06050f;
+  --space:       #0b0920;
+  --deep:        #0f0e1e;
+  --panel:       #13122a;
+  --panel-2:     #191838;
+  --lift:        #201f42;
+  --violet:      #7c3aed;
+  --violet-lt:   #a78bfa;
+  --violet-glow: rgba(124,58,237,.22);
+  --neon:        #e040fb;
+  --neon-glow:   rgba(224,64,251,.18);
+  --electric:    #06b6d4;
+  --lime:        #84cc16;
+  --red-acc:     #f43f5e;
+  --ink:         #e8e4f8;
+  --ink-2:       #9590b8;
+  --ink-3:       #4d4870;
+  --ink-4:       #2a2550;
+  --border:      rgba(124,58,237,.18);
+  --border-2:    rgba(124,58,237,.38);
+  --r:           10px;
+  --r-lg:        20px;
+  --mono:        'Space Mono', monospace;
+  --serif:       'Playfair Display', serif;
+  --body:        'Manrope', sans-serif;
+  --nav-h:       70px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--body);
+  background:var(--void);
+  color:var(--ink);
+  overflow-x:hidden;
+  cursor:none;
+  line-height:1.7;
+}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{font-family:inherit;border:none;background:none;cursor:pointer}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--violet);border-radius:2px}
+
+/* ============================================================
+   CURSOR
+============================================================ */
+#cur-a{
+  position:fixed;top:0;left:0;z-index:9999;
+  width:8px;height:8px;
+  background:var(--violet-lt);
+  border-radius:50%;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 12px var(--violet-lt),0 0 24px var(--violet);
+  transition:width .2s,height .2s;
+}
+#cur-b{
+  position:fixed;top:0;left:0;z-index:9998;
+  width:38px;height:38px;
+  border:1px solid rgba(124,58,237,.5);
+  border-radius:50%;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  transition:left .1s ease,top .1s ease,width .3s,height .3s,border-color .3s;
+}
+body.hovering #cur-a{width:6px;height:6px}
+body.hovering #cur-b{width:56px;height:56px;border-color:var(--violet)}
+
+/* ============================================================
+   LOADER
+============================================================ */
+#loader{
+  position:fixed;inset:0;z-index:10000;
+  background:var(--void);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:32px;
+  transition:opacity .8s ease,visibility .8s ease;
+}
+#loader.gone{opacity:0;visibility:hidden}
+.ld-ring{
+  width:80px;height:80px;
+  border:1px solid var(--ink-4);
+  border-top-color:var(--violet);
+  border-right-color:var(--neon);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld-word{
+  font-family:var(--serif);
+  font-size:clamp(2rem,6vw,4rem);
+  font-weight:900;
+  letter-spacing:6px;
+  background:linear-gradient(135deg,var(--violet-lt),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.ld-line-wrap{
+  width:200px;height:1px;
+  background:var(--panel);
+  position:relative;overflow:hidden;
+}
+.ld-line-fill{
+  position:absolute;top:0;left:0;height:100%;width:0;
+  background:linear-gradient(90deg,var(--violet),var(--neon));
+  animation:ldLine 1.8s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes ldLine{to{width:100%}}
+.ld-tag{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--ink-3);letter-spacing:5px;text-transform:uppercase;
+}
+
+/* ============================================================
+   CANVAS (particle field)
+============================================================ */
+#canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;opacity:.5;
+}
+
+/* ============================================================
+   SECTION BASE
+============================================================ */
+section{position:relative;z-index:2;padding:120px 6%}
+.wrap{max-width:1260px;margin:0 auto}
+
+/* ── Scroll reveal ── */
+.sr{opacity:0;transform:translateY(32px);transition:opacity .8s ease,transform .8s ease}
+.sr.vis{opacity:1;transform:translateY(0)}
+.sr-left{opacity:0;transform:translateX(-30px);transition:opacity .8s ease,transform .8s ease}
+.sr-left.vis{opacity:1;transform:translateX(0)}
+.sr-right{opacity:0;transform:translateX(30px);transition:opacity .8s ease,transform .8s ease}
+.sr-right.vis{opacity:1;transform:translateX(0)}
+
+/* ── Eyebrow ── */
+.ew{
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--violet-lt);letter-spacing:5px;text-transform:uppercase;
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;
+}
+.ew::before{content:'▸';font-size:.8rem;color:var(--neon)}
+
+/* ── Big title ── */
+.bt{
+  font-family:var(--serif);
+  font-size:clamp(2.4rem,5vw,4.2rem);
+  font-weight:900;line-height:1.05;
+  letter-spacing:-1px;margin-bottom:20px;
+}
+.bt em{font-style:italic;color:var(--violet-lt)}
+.bt .nx{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--violet),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ── Body copy ── */
+.bc{font-size:1rem;color:var(--ink-2);line-height:1.85;max-width:520px}
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:.72rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:13px 26px;border-radius:6px;
+  transition:all .3s ease;cursor:pointer;
+}
+.btn-v{
+  background:linear-gradient(135deg,var(--violet),var(--neon));
+  color:#fff;font-weight:700;
+}
+.btn-v:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(124,58,237,.45)}
+.btn-o{
+  border:1px solid var(--border-2);
+  color:var(--ink-2);background:transparent;
+}
+.btn-o:hover{
+  border-color:var(--violet-lt);color:var(--violet-lt);
+  transform:translateY(-3px);background:rgba(124,58,237,.07);
+  box-shadow:0 0 24px var(--violet-glow);
+}
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+#nav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--nav-h);z-index:500;
+  padding:0 6%;
+  transition:background .4s,border-color .4s;
+}
+#nav.scrolled{
+  background:rgba(6,5,15,.88);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.nav-in{
+  max-width:1260px;margin:0 auto;
+  height:100%;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.5rem;font-weight:700;
+  background:linear-gradient(135deg,var(--violet-lt),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:1px;
+}
+.nav-brand span{
+  display:block;font-family:var(--mono);font-style:normal;
+  font-size:.52rem;letter-spacing:5px;
+  -webkit-text-fill-color:var(--ink-3);color:var(--ink-3);
+  text-transform:uppercase;margin-top:-1px;
+}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--ink-3);letter-spacing:2px;text-transform:uppercase;
+  position:relative;transition:color .3s;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-3px;left:0;
+  width:0;height:1px;
+  background:linear-gradient(90deg,var(--violet),var(--neon));
+  transition:width .35s ease;
+}
+.nav-links a:hover{color:var(--violet-lt)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--violet-lt)!important;
+  border:1px solid var(--border-2);
+  padding:7px 18px!important;border-radius:5px;
+  letter-spacing:2px;
+  transition:all .3s!important;
+}
+.nav-cta::after{display:none!important}
+.nav-cta:hover{
+  background:rgba(124,58,237,.12)!important;
+  box-shadow:0 0 20px var(--violet-glow)!important;
+  color:#fff!important;
+}
+.burger{display:none;flex-direction:column;gap:5px}
+.burger span{display:block;width:22px;height:1.5px;background:var(--violet-lt);border-radius:2px;transition:.3s}
+
+/* Mobile panel */
+.m-panel{
+  position:fixed;top:0;right:0;
+  width:280px;height:100vh;
+  background:rgba(11,9,32,.97);
+  backdrop-filter:blur(20px);
+  border-left:1px solid var(--border);
+  z-index:600;padding:90px 32px 32px;
+  transform:translateX(110%);
+  transition:transform .4s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;gap:6px;
+}
+.m-panel.open{transform:translateX(0)}
+.m-panel a{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.4rem;font-weight:700;
+  color:var(--ink-2);padding:10px 0;
+  border-bottom:1px solid var(--border);transition:color .3s;
+}
+.m-panel a:hover{color:var(--violet-lt)}
+.m-overlay{
+  position:fixed;inset:0;z-index:599;
+  background:rgba(0,0,0,.7);
+  opacity:0;visibility:hidden;transition:.3s;
+}
+.m-overlay.open{opacity:1;visibility:visible}
+
+/* ============================================================
+   HERO
+============================================================ */
+#hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding-top:calc(var(--nav-h) + 80px);
+  padding-bottom:100px;
+  overflow:hidden;
+}
+
+/* Diagonal decorative slash */
+#hero::before{
+  content:'';
+  position:absolute;
+  top:-20%;right:-10%;
+  width:60vw;height:120%;
+  background:linear-gradient(135deg,rgba(124,58,237,.06) 0%,rgba(224,64,251,.04) 50%,transparent 70%);
+  transform:skewX(-12deg);
+  pointer-events:none;z-index:0;
+  border-left:1px solid rgba(124,58,237,.08);
+}
+
+.hero-in{
+  max-width:1260px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 420px;
+  gap:60px;align-items:center;
+  position:relative;z-index:2;
+}
+
+/* Status badge */
+.h-badge{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--lime);letter-spacing:3px;text-transform:uppercase;
+  border:1px solid rgba(132,204,22,.22);
+  background:rgba(132,204,22,.06);
+  border-radius:99px;padding:6px 14px;
+  margin-bottom:28px;
+}
+.h-badge-dot{
+  width:6px;height:6px;background:var(--lime);
+  border-radius:50%;animation:pulse 2s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
+
+/* Name — massive editorial treatment */
+.h-name-line1{
+  font-family:var(--serif);font-weight:400;font-style:italic;
+  font-size:clamp(1rem,2.5vw,1.5rem);
+  color:var(--ink-3);letter-spacing:3px;
+  margin-bottom:4px;
+}
+.h-name{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(5rem,15vw,12rem);
+  line-height:.88;letter-spacing:-4px;
+  background:linear-gradient(160deg,#fff 25%,var(--ink-2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:24px;
+}
+.h-role-row{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:24px;
+}
+.h-role-line{
+  width:40px;height:1px;
+  background:linear-gradient(90deg,var(--violet),var(--neon));
+  flex-shrink:0;
+}
+.h-typed{
+  font-family:var(--mono);font-size:.82rem;
+  color:var(--violet-lt);letter-spacing:1px;min-height:1.2em;
+}
+.h-tcur{
+  display:inline-block;width:2px;height:.85em;
+  background:var(--neon);margin-left:2px;
+  vertical-align:middle;animation:blk .75s step-end infinite;
+}
+@keyframes blk{0%,100%{opacity:1}50%{opacity:0}}
+.h-desc{
+  font-size:1rem;color:var(--ink-2);
+  line-height:1.85;max-width:480px;
+  margin-bottom:38px;
+}
+.h-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:50px}
+.h-socials{display:flex;gap:10px}
+.h-soc{
+  width:38px;height:38px;
+  border:1px solid var(--border);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-3);font-size:1rem;
+  transition:all .3s;
+}
+.h-soc:hover{
+  border-color:var(--violet);color:var(--violet-lt);
+  background:rgba(124,58,237,.09);transform:translateY(-3px);
+  box-shadow:0 0 20px var(--violet-glow);
+}
+
+/* Hero right — floating card */
+.h-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 60px var(--violet-glow);
+  animation:hFloat 7s ease-in-out infinite;
+}
+@keyframes hFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(.3deg)}}
+.hc-top{
+  background:var(--panel-2);
+  padding:12px 16px;
+  display:flex;align-items:center;gap:7px;
+  border-bottom:1px solid var(--border);
+}
+.hc-dot{width:10px;height:10px;border-radius:50%}
+.hc-dot:nth-child(1){background:#ff5f57}
+.hc-dot:nth-child(2){background:#febc2e}
+.hc-dot:nth-child(3){background:#28c840}
+.hc-file{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--ink-4);margin-left:auto;letter-spacing:1px;
+}
+.hc-body{
+  padding:20px 22px;
+  font-family:var(--mono);font-size:.73rem;line-height:2.1;
+}
+.mk{color:#e879f9}.ms{color:var(--lime)}.mn{color:#fb923c}
+.mp{color:var(--violet-lt)}.mc{color:var(--ink-4)}.mb{color:#38bdf8}
+
+/* Hero stats */
+.h-stats{
+  display:flex;gap:0;
+  border-top:1px solid var(--border);
+  padding-top:36px;margin-top:36px;
+}
+.h-stat{
+  flex:1;padding-right:28px;margin-right:28px;
+  border-right:1px solid var(--border);
+}
+.h-stat:last-child{border-right:none;margin-right:0;padding-right:0}
+.h-stat-n{
+  font-family:var(--serif);font-size:2.6rem;
+  font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--violet-lt),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.h-stat-l{
+  font-family:var(--mono);font-size:.58rem;
+  color:var(--ink-3);letter-spacing:3px;text-transform:uppercase;margin-top:5px;
+}
+
+/* Scroll cue */
+.scroll-cue{
+  position:absolute;bottom:40px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--ink-4);letter-spacing:4px;text-transform:uppercase;
+  z-index:2;opacity:0;animation:scueIn 1s ease 2.5s forwards;
+}
+@keyframes scueIn{to{opacity:1}}
+.scroll-cue-line{
+  width:1px;height:40px;
+  background:linear-gradient(var(--violet),transparent);
+  animation:scueLine 2.2s ease-in-out infinite;
+}
+@keyframes scueLine{
+  0%{transform:scaleY(0);transform-origin:top;opacity:0}
+  50%{transform:scaleY(1);transform-origin:top;opacity:1}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom;opacity:0}
+}
+
+/* ============================================================
+   ABOUT
+============================================================ */
+#about{background:var(--space)}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:90px;align-items:center;
+}
+/* Left — decorative identity block */
+.about-vis{position:relative}
+.about-main-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  aspect-ratio:3/4;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:18px;
+  overflow:hidden;position:relative;
+}
+.amc-strip{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--violet),var(--neon),var(--electric));
+}
+.amc-bg-text{
+  position:absolute;bottom:-20px;left:-10px;
+  font-family:var(--serif);font-style:italic;font-weight:900;
+  font-size:8rem;color:var(--border);line-height:1;
+  user-select:none;pointer-events:none;letter-spacing:-4px;
+}
+.amc-emoji{font-size:5.5rem;line-height:1;z-index:1}
+.amc-name{
+  font-family:var(--serif);font-weight:900;font-style:italic;
+  font-size:2rem;letter-spacing:1px;z-index:1;
+  background:linear-gradient(135deg,var(--violet-lt),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.amc-role{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--ink-3);letter-spacing:4px;z-index:1;
+}
+.about-deco1{
+  position:absolute;top:-18px;right:-18px;
+  width:64px;height:64px;
+  border:1px solid var(--violet);border-radius:var(--r);
+  opacity:.25;
+}
+.about-deco2{
+  position:absolute;bottom:-18px;left:-18px;
+  width:44px;height:44px;
+  border:1px solid var(--neon);border-radius:50%;
+  opacity:.2;
+}
+
+/* Right copy */
+.about-copy .bc{margin-bottom:14px;max-width:none}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:26px 0 32px}
+.chip{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--violet-lt);
+  border:1px solid rgba(124,58,237,.25);
+  background:rgba(124,58,237,.08);
+  border-radius:5px;padding:5px 12px;letter-spacing:1px;
+}
+.info-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;
+}
+.ig-item{}
+.ig-lbl{
+  font-family:var(--mono);font-size:.56rem;
+  color:var(--ink-4);letter-spacing:4px;text-transform:uppercase;
+}
+.ig-val{font-size:.9rem;color:var(--ink);font-weight:600;margin-top:3px}
+
+/* ============================================================
+   SKILLS
+============================================================ */
+#skills{}
+.sk-header{
+  display:flex;justify-content:space-between;
+  align-items:flex-end;margin-bottom:60px;flex-wrap:wrap;gap:20px;
+}
+.sk-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+}
+.sk-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:28px;
+  position:relative;overflow:hidden;
+  transition:all .35s ease;
+}
+.sk-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  opacity:0;transition:opacity .35s;
+}
+.sk-fe::before{background:linear-gradient(90deg,var(--violet),var(--neon))}
+.sk-be::before{background:linear-gradient(90deg,var(--electric),var(--violet))}
+.sk-to::before{background:linear-gradient(90deg,var(--neon),var(--red-acc))}
+.sk-card:hover{
+  border-color:var(--border-2);
+  transform:translateY(-5px);
+  box-shadow:0 20px 50px rgba(0,0,0,.4),0 0 40px var(--violet-glow);
+}
+.sk-card:hover::before{opacity:1}
+/* watermark letter */
+.sk-wm{
+  position:absolute;bottom:-16px;right:8px;
+  font-family:var(--serif);font-style:italic;font-weight:900;
+  font-size:6rem;color:rgba(124,58,237,.05);
+  pointer-events:none;user-select:none;line-height:1;
+}
+.sk-ttl{
+  font-family:var(--serif);font-weight:700;font-style:italic;
+  font-size:1.15rem;margin-bottom:4px;
+}
+.sk-sub{
+  font-family:var(--mono);font-size:.58rem;
+  color:var(--ink-4);letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;
+}
+.sk-list{display:flex;flex-direction:column;gap:15px}
+.sk-row-top{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:7px;
+}
+.sk-nm{font-size:.85rem;color:var(--ink);display:flex;align-items:center;gap:7px}
+.sk-pc{font-family:var(--mono);font-size:.62rem;color:var(--ink-4)}
+.sk-track{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.sk-fill{height:100%;width:0;border-radius:2px;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.sk-fe .sk-fill{background:linear-gradient(90deg,var(--violet),var(--neon))}
+.sk-be .sk-fill{background:linear-gradient(90deg,var(--electric),var(--violet-lt))}
+.sk-to .sk-fill{background:linear-gradient(90deg,var(--neon),var(--red-acc))}
+
+/* ============================================================
+   PROJECTS
+============================================================ */
+#projects{background:var(--space)}
+.pj-header{
+  display:flex;justify-content:space-between;
+  align-items:flex-end;margin-bottom:60px;flex-wrap:wrap;gap:20px;
+}
+.pj-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:26px;
+}
+.pj-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:all .35s ease;
+}
+.pj-card:hover{
+  border-color:var(--border-2);
+  transform:translateY(-8px);
+  box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 50px var(--violet-glow);
+}
+.pj-thumb{
+  position:relative;aspect-ratio:16/10;
+  background:var(--deep);overflow:hidden;
+}
+.pj-thumb-in{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.pj-mesh{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(124,58,237,.08) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(124,58,237,.08) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.pj-emoji{position:relative;z-index:1;font-size:3.4rem;filter:drop-shadow(0 0 20px rgba(124,58,237,.5))}
+/* hover reveal */
+.pj-reveal{
+  position:absolute;inset:0;
+  background:rgba(6,5,15,.88);
+  opacity:0;transition:opacity .35s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.pj-card:hover .pj-reveal{opacity:1}
+.prb{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:1px;
+  display:flex;align-items:center;gap:6px;
+  padding:9px 16px;border-radius:5px;transition:.2s;
+}
+.prb-s{background:linear-gradient(135deg,var(--violet),var(--neon));color:#fff;font-weight:700}
+.prb-s:hover{transform:scale(1.06)}
+.prb-g{border:1px solid rgba(255,255,255,.2);color:var(--ink-2)}
+.prb-g:hover{border-color:var(--violet-lt);color:var(--violet-lt)}
+
+.pj-body{padding:22px;flex:1;display:flex;flex-direction:column}
+.pj-num{
+  font-family:var(--mono);font-size:.58rem;
+  color:var(--violet-lt);letter-spacing:5px;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.pj-title{
+  font-family:var(--serif);font-weight:700;font-style:italic;
+  font-size:1.25rem;margin-bottom:10px;line-height:1.2;
+}
+.pj-desc{font-size:.87rem;color:var(--ink-2);line-height:1.75;flex:1;margin-bottom:18px}
+.pj-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.pj-tag{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--ink-3);background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:4px;padding:3px 9px;
+}
+.pj-links{
+  display:flex;gap:14px;padding-top:15px;
+  border-top:1px solid var(--border);
+}
+.pj-link{
+  font-family:var(--mono);font-size:.68rem;
+  display:flex;align-items:center;gap:5px;transition:.25s;
+}
+.pjl-gh{color:var(--ink-3)}
+.pjl-lv{color:var(--violet-lt)}
+.pj-link:hover{color:var(--violet-lt);transform:translateX(2px)}
+.pj-link svg{width:13px;height:13px}
+
+/* ============================================================
+   CONTACT
+============================================================ */
+#contact{}
+.ct-grid{
+  display:grid;grid-template-columns:1fr 1.2fr;
+  gap:90px;align-items:start;
+}
+.ct-left h3{
+  font-family:var(--serif);font-style:italic;font-weight:900;
+  font-size:clamp(1.8rem,3vw,2.6rem);margin-bottom:16px;line-height:1.1;
+}
+.ct-left p{font-size:.95rem;color:var(--ink-2);line-height:1.8;margin-bottom:36px}
+.ct-items{display:flex;flex-direction:column;gap:13px;margin-bottom:36px}
+.ct-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;background:var(--panel);
+  border:1px solid var(--border);border-radius:var(--r);
+  transition:.3s;
+}
+.ct-item:hover{border-color:var(--border-2);background:var(--panel-2);transform:translateX(4px)}
+.ct-ico{
+  width:38px;height:38px;
+  background:rgba(124,58,237,.12);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+.ct-lbl{font-family:var(--mono);font-size:.56rem;color:var(--ink-4);letter-spacing:4px;text-transform:uppercase}
+.ct-val{font-size:.9rem;color:var(--ink);margin-top:1px}
+.ct-socs{display:flex;gap:10px}
+.ct-soc{
+  width:40px;height:40px;border:1px solid var(--border);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-3);transition:.3s;
+}
+.ct-soc:hover{
+  border-color:var(--violet);color:var(--violet-lt);
+  background:rgba(124,58,237,.09);transform:translateY(-3px);
+  box-shadow:0 0 20px var(--violet-glow);
+}
+
+/* Form */
+.cf{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:38px;position:relative;
+}
+.cf-glow{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--violet),var(--neon),var(--electric));
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.fl{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--ink-4);letter-spacing:4px;text-transform:uppercase;
+}
+.fi,.fta{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:7px;color:var(--ink);
+  font-family:var(--body);font-size:.92rem;
+  padding:12px 15px;transition:.3s;outline:none;width:100%;
+}
+.fi:focus,.fta:focus{
+  border-color:var(--violet);
+  box-shadow:0 0 0 3px var(--violet-glow);
+  background:rgba(124,58,237,.04);
+}
+.fi::placeholder,.fta::placeholder{color:var(--ink-4);font-size:.84rem}
+.fta{min-height:130px;resize:vertical}
+.cf-btn{
+  width:100%;background:linear-gradient(135deg,var(--violet),var(--neon));
+  color:#fff;font-family:var(--mono);font-size:.72rem;
+  letter-spacing:3px;text-transform:uppercase;font-weight:700;
+  padding:14px;border-radius:7px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  transition:.3s;
+}
+.cf-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(124,58,237,.4)}
+.cf-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+/* success */
+.cf-ok{
+  display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:50px 20px;gap:14px;
+}
+.cf-ok.on{display:flex}
+.cf-ok-ico{font-size:3.2rem}
+.cf-ok-ttl{
+  font-family:var(--serif);font-style:italic;font-weight:900;
+  font-size:1.7rem;color:var(--lime);
+}
+.cf-ok-p{font-size:.9rem;color:var(--ink-2)}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer{
+  position:relative;z-index:2;
+  background:var(--space);
+  border-top:1px solid var(--border);
+  padding:38px 6%;
+}
+.ft-in{
+  max-width:1260px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.ft-copy{font-family:var(--mono);font-size:.65rem;color:var(--ink-4);letter-spacing:1px}
+.ft-copy span{color:var(--violet-lt)}
+.ft-nav{display:flex;gap:22px}
+.ft-nav a{
+  font-family:var(--mono);font-size:.62rem;
+  color:var(--ink-4);letter-spacing:2px;text-transform:uppercase;transition:color .3s;
+}
+.ft-nav a:hover{color:var(--violet-lt)}
+
+/* ── Back to top ── */
+#btt{
+  position:fixed;bottom:28px;right:28px;z-index:400;
+  width:42px;height:42px;
+  border:1px solid var(--border);border-radius:7px;
+  background:var(--panel);color:var(--violet-lt);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(8px);
+  transition:.3s;cursor:pointer;
+}
+#btt.on{opacity:1;transform:translateY(0)}
+#btt:hover{background:rgba(124,58,237,.12);border-color:var(--violet);box-shadow:0 0 20px var(--violet-glow)}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media(max-width:1100px){
+  .hero-in{grid-template-columns:1fr}.h-card{display:none}
+  .about-grid{grid-template-columns:1fr;gap:50px}
+  .about-vis{max-width:380px;margin:0 auto}
+  .sk-grid{grid-template-columns:1fr 1fr}
+  .pj-grid{grid-template-columns:1fr 1fr}
+  .ct-grid{grid-template-columns:1fr;gap:50px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}.burger{display:flex}
+  .sk-grid{grid-template-columns:1fr}
+  .pj-grid{grid-template-columns:1fr}
+  .cf-row{grid-template-columns:1fr}
+  .h-stats{flex-wrap:wrap;gap:20px}
+  .ft-in{flex-direction:column;text-align:center}
+}
+@media(max-width:480px){
+  .h-btns{flex-direction:column}
+  .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cur-a"></div>
+<div id="cur-b"></div>
+
+<!-- Particle canvas -->
+<canvas id="canvas"></canvas>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="ld-ring"></div>
+  <div class="ld-word">ATHUL</div>
+  <div class="ld-line-wrap"><div class="ld-line-fill"></div></div>
+  <div class="ld-tag">Initializing portfolio...</div>
+</div>
+
+<!-- Mobile overlay -->
+<div class="m-overlay" id="mOverlay" onclick="closeNav()"></div>
+<nav class="m-panel" id="mPanel">
+  <a href="#hero"     onclick="closeNav()">Home</a>
+  <a href="#about"    onclick="closeNav()">About</a>
+  <a href="#skills"   onclick="closeNav()">Skills</a>
+  <a href="#projects" onclick="closeNav()">Projects</a>
+  <a href="#contact"  onclick="closeNav()">Contact</a>
+</nav>
+
+<!-- ════════════════════ NAVBAR ════════════════════ -->
+<header id="nav">
+  <div class="nav-in">
+    <a href="#hero" class="nav-brand">
+      Athul
+      <span>Full Stack Developer</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#" class="nav-cta" onclick="dlResume(event)">Resume ↓</a></li>
+    </ul>
+    <div class="burger" id="burger" onclick="openNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<section id="hero">
+  <div class="hero-in">
+    <!-- Left -->
+    <div class="h-left">
+      <div class="h-badge sr"><span class="h-badge-dot"></span>Open to Internship &amp; Freelance</div>
+      <p class="h-name-line1 sr" style="transition-delay:.1s">Hello, I'm</p>
+      <h1 class="h-name sr" style="transition-delay:.15s">ATHUL</h1>
+      <div class="h-role-row sr" style="transition-delay:.25s">
+        <span class="h-role-line"></span>
+        <span class="h-typed" id="hTyped"></span><span class="h-tcur"></span>
+      </div>
+      <p class="h-desc sr" style="transition-delay:.3s">
+        Passionate about crafting full-stack web applications with clean architecture,
+        modern UI patterns, and real-world impact. I build from pixel to production.
+      </p>
+      <div class="h-btns sr" style="transition-delay:.4s">
+        <a href="#projects" class="btn btn-v">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          View My Work
+        </a>
+        <a href="#contact" class="btn btn-o">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Get In Touch
+        </a>
+      </div>
+      <div class="h-socials sr" style="transition-delay:.5s">
+        <a href="https://github.com/athul" target="_blank" class="h-soc" title="GitHub">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="h-soc" title="LinkedIn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://twitter.com" target="_blank" class="h-soc" title="X / Twitter">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="mailto:athul@example.com" class="h-soc" title="Email">
+          <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+      <div class="h-stats sr" style="transition-delay:.6s">
+        <div class="h-stat">
+          <div class="h-stat-n"><span id="sn1">0</span>+</div>
+          <div class="h-stat-l">Projects Built</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-n"><span id="sn2">0</span>+</div>
+          <div class="h-stat-l">Technologies</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-n"><span id="sn3">0</span>k+</div>
+          <div class="h-stat-l">Lines of Code</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right — code card -->
+    <div class="h-card sr" style="transition-delay:.5s">
+      <div class="hc-top">
+        <div class="hc-dot"></div><div class="hc-dot"></div><div class="hc-dot"></div>
+        <span class="hc-file">~/athul/config.js</span>
+      </div>
+      <div class="hc-body">
+        <div><span style="color:var(--ink-4)">// </span><span style="color:var(--ink-3)">Athul's Developer Config</span></div>
+        <div>&nbsp;</div>
+        <div><span class="mk">const</span> <span class="mb">dev</span> = {</div>
+        <div>&nbsp;&nbsp;<span class="mp">name</span>: <span class="ms">"Athul"</span>,</div>
+        <div>&nbsp;&nbsp;<span class="mp">role</span>: <span class="ms">"Full Stack Dev"</span>,</div>
+        <div>&nbsp;&nbsp;<span class="mp">location</span>: <span class="ms">"India 🇮🇳"</span>,</div>
+        <div>&nbsp;&nbsp;<span class="mp">stack</span>: [</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ms">"React"</span>, <span class="ms">"Node"</span>,</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="ms">"Express"</span>, <span class="ms">"MongoDB"</span></div>
+        <div>&nbsp;&nbsp;],</div>
+        <div>&nbsp;&nbsp;<span class="mp">github</span>: <span class="ms">"@athul"</span>,</div>
+        <div>&nbsp;&nbsp;<span class="mp">openToWork</span>: <span class="mk">true</span>,</div>
+        <div>&nbsp;&nbsp;<span class="mp">coffeeLevel</span>: <span class="mn">Infinity</span></div>
+        <div>};</div>
+        <div>&nbsp;</div>
+        <div><span class="mc">// export default dev 🚀</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-cue-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ════════════════════ ABOUT ════════════════════ -->
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-vis sr-left">
+      <div class="about-main-card">
+        <div class="amc-strip"></div>
+        <div class="amc-bg-text">AK</div>
+        <div class="amc-emoji">👨‍💻</div>
+        <div class="amc-name">Athul</div>
+        <div class="amc-role">Full Stack Developer</div>
+      </div>
+      <div class="about-deco1"></div>
+      <div class="about-deco2"></div>
+    </div>
+    <div class="about-copy sr-right" style="transition-delay:.15s">
+      <div class="ew">About Me</div>
+      <h2 class="bt">Building <em>Ideas</em><br>Into <span class="nx">Reality</span></h2>
+      <p class="bc">I'm <strong>Athul</strong>, an aspiring Full Stack Developer from India with a passion for turning complex problems into elegant, user-friendly web applications.</p>
+      <p class="bc" style="margin-top:12px">My journey in web development started with curiosity and has grown into a commitment to mastering the full MERN stack — from pixel-perfect frontends to scalable backend APIs. I write clean, maintainable code and ship products that users love.</p>
+      <div class="chips">
+        <span class="chip">MERN Stack</span>
+        <span class="chip">REST APIs</span>
+        <span class="chip">Responsive UI</span>
+        <span class="chip">Git & GitHub</span>
+        <span class="chip">Problem Solver</span>
+        <span class="chip">Open Source</span>
+      </div>
+      <div class="info-grid">
+        <div class="ig-item">
+          <div class="ig-lbl">Name</div>
+          <div class="ig-val">Athul</div>
+        </div>
+        <div class="ig-item">
+          <div class="ig-lbl">Location</div>
+          <div class="ig-val">India 🇮🇳</div>
+        </div>
+        <div class="ig-item">
+          <div class="ig-lbl">GitHub</div>
+          <div class="ig-val">@athul</div>
+        </div>
+        <div class="ig-item">
+          <div class="ig-lbl">Status</div>
+          <div class="ig-val" style="color:var(--lime)">● Available</div>
+        </div>
+      </div>
+      <br>
+      <a href="#" class="btn btn-v" onclick="dlResume(event)" style="width:fit-content;margin-top:12px">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Resume
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SKILLS ════════════════════ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sk-header">
+      <div class="sr">
+        <div class="ew">Skills</div>
+        <h2 class="bt">My <span class="nx">Technical</span><br>Arsenal</h2>
+      </div>
+      <p class="bc sr" style="max-width:320px;transition-delay:.15s">Technologies I use to architect and build full-stack applications end-to-end.</p>
+    </div>
+    <div class="sk-grid">
+      <!-- Frontend -->
+      <div class="sk-card sk-fe sr">
+        <div class="sk-wm">F</div>
+        <div class="sk-ttl">Frontend</div>
+        <div class="sk-sub">Interface Layer</div>
+        <div class="sk-list">
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🌐 HTML5</span><span class="sk-pc">90%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="90"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🎨 CSS3</span><span class="sk-pc">85%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="85"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">⚡ JavaScript</span><span class="sk-pc">80%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="80"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">⚛️ React.js</span><span class="sk-pc">75%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="75"></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Backend -->
+      <div class="sk-card sk-be sr" style="transition-delay:.15s">
+        <div class="sk-wm">B</div>
+        <div class="sk-ttl">Backend</div>
+        <div class="sk-sub">Server &amp; Database</div>
+        <div class="sk-list">
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🟢 Node.js</span><span class="sk-pc">78%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="78"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🚂 Express.js</span><span class="sk-pc">75%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="75"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🍃 MongoDB</span><span class="sk-pc">72%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="72"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🔗 REST APIs</span><span class="sk-pc">80%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="80"></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Tools -->
+      <div class="sk-card sk-to sr" style="transition-delay:.3s">
+        <div class="sk-wm">T</div>
+        <div class="sk-ttl">Tooling</div>
+        <div class="sk-sub">Dev Ecosystem</div>
+        <div class="sk-list">
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🐙 Git &amp; GitHub</span><span class="sk-pc">82%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="82"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🧩 Problem Solving</span><span class="sk-pc">85%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="85"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🚀 Vercel / Render</span><span class="sk-pc">73%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="73"></div></div>
+          </div>
+          <div>
+            <div class="sk-row-top"><span class="sk-nm">🔧 VS Code</span><span class="sk-pc">92%</span></div>
+            <div class="sk-track"><div class="sk-fill" data-w="92"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ PROJECTS ════════════════════ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="pj-header">
+      <div class="sr">
+        <div class="ew">Projects</div>
+        <h2 class="bt">Things I've<br><span class="nx">Shipped</span></h2>
+      </div>
+      <p class="bc sr" style="max-width:300px;transition-delay:.15s">Real-world applications built to demonstrate full-stack capabilities — design to deployment.</p>
+    </div>
+    <div class="pj-grid">
+
+      <!-- Project 1 -->
+      <div class="pj-card sr">
+        <div class="pj-thumb">
+          <div class="pj-thumb-in">
+            <div class="pj-mesh"></div>
+            <span class="pj-emoji">🌐</span>
+          </div>
+          <div class="pj-reveal">
+            <a href="https://github.com/athul/portfolio-website" target="_blank" class="prb prb-s">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              Code
+            </a>
+            <a href="https://athul-portfolio.vercel.app" target="_blank" class="prb prb-g">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live
+            </a>
+          </div>
+        </div>
+        <div class="pj-body">
+          <div class="pj-num">Project — 01</div>
+          <h3 class="pj-title">Personal Portfolio Website</h3>
+          <p class="pj-desc">A modern dark-themed developer portfolio with animated hero, skill progress bars, project showcase, and a full contact form backed by Node.js and MongoDB. Deployed on Vercel and Render.</p>
+          <div class="pj-tags">
+            <span class="pj-tag">HTML5</span><span class="pj-tag">CSS3</span>
+            <span class="pj-tag">JavaScript</span><span class="pj-tag">Node.js</span>
+            <span class="pj-tag">MongoDB</span><span class="pj-tag">Express</span>
+          </div>
+          <div class="pj-links">
+            <a href="https://github.com/athul/portfolio-website" target="_blank" class="pj-link pjl-gh">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              View Code
+            </a>
+            <a href="https://athul-portfolio.vercel.app" target="_blank" class="pj-link pjl-lv">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="pj-card sr" style="transition-delay:.15s">
+        <div class="pj-thumb">
+          <div class="pj-thumb-in" style="background:var(--deep)">
+            <div class="pj-mesh"></div>
+            <span class="pj-emoji">✅</span>
+          </div>
+          <div class="pj-reveal">
+            <a href="https://github.com/athul/task-manager" target="_blank" class="prb prb-s">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              Code
+            </a>
+            <a href="https://athul-tasks.vercel.app" target="_blank" class="prb prb-g">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live
+            </a>
+          </div>
+        </div>
+        <div class="pj-body">
+          <div class="pj-num">Project — 02</div>
+          <h3 class="pj-title">Task Management Application</h3>
+          <p class="pj-desc">A full-featured MERN productivity app with JWT authentication, Kanban-style task boards, priority labels, due date tracking, and a real-time dashboard for managing daily workflow efficiently.</p>
+          <div class="pj-tags">
+            <span class="pj-tag">React.js</span><span class="pj-tag">Node.js</span>
+            <span class="pj-tag">Express</span><span class="pj-tag">MongoDB</span>
+            <span class="pj-tag">JWT Auth</span>
+          </div>
+          <div class="pj-links">
+            <a href="https://github.com/athul/task-manager" target="_blank" class="pj-link pjl-gh">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              View Code
+            </a>
+            <a href="https://athul-tasks.vercel.app" target="_blank" class="pj-link pjl-lv">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="pj-card sr" style="transition-delay:.3s">
+        <div class="pj-thumb">
+          <div class="pj-thumb-in" style="background:var(--panel-2)">
+            <div class="pj-mesh"></div>
+            <span class="pj-emoji">🎓</span>
+          </div>
+          <div class="pj-reveal">
+            <a href="https://github.com/athul/student-management" target="_blank" class="prb prb-s">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              Code
+            </a>
+            <a href="https://athul-sms.vercel.app" target="_blank" class="prb prb-g">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live
+            </a>
+          </div>
+        </div>
+        <div class="pj-body">
+          <div class="pj-num">Project — 03</div>
+          <h3 class="pj-title">Student Management System</h3>
+          <p class="pj-desc">A comprehensive education platform for managing student records, attendance tracking, grade management, and course enrollment. Includes role-based access for admins and faculty with a visual analytics dashboard.</p>
+          <div class="pj-tags">
+            <span class="pj-tag">HTML/CSS/JS</span><span class="pj-tag">Node.js</span>
+            <span class="pj-tag">Express</span><span class="pj-tag">MongoDB</span>
+            <span class="pj-tag">Chart.js</span>
+          </div>
+          <div class="pj-links">
+            <a href="https://github.com/athul/student-management" target="_blank" class="pj-link pjl-gh">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              View Code
+            </a>
+            <a href="https://athul-sms.vercel.app" target="_blank" class="pj-link pjl-lv">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ CONTACT ════════════════════ -->
+<section id="contact">
+  <div class="wrap ct-grid">
+    <!-- Left -->
+    <div class="sr-left">
+      <div class="ew">Contact</div>
+      <h3 style="font-family:var(--serif);font-style:italic;font-weight:900;font-size:clamp(1.8rem,3vw,2.6rem);margin-bottom:16px;line-height:1.1">
+        Let's Create<br>Something <span style="background:linear-gradient(135deg,var(--violet),var(--neon));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Together</span>
+      </h3>
+      <p style="font-size:.95rem;color:var(--ink-2);line-height:1.85;margin-bottom:36px">Have a project, opportunity, or just want to say hi? I'm always open to meaningful conversations and collaborations.</p>
+      <div class="ct-items">
+        <div class="ct-item">
+          <div class="ct-ico">📧</div>
+          <div>
+            <div class="ct-lbl">Email</div>
+            <div class="ct-val">athul@example.com</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-ico">📍</div>
+          <div>
+            <div class="ct-lbl">Location</div>
+            <div class="ct-val">India 🇮🇳</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-ico">🐙</div>
+          <div>
+            <div class="ct-lbl">GitHub</div>
+            <div class="ct-val">github.com/athul</div>
+          </div>
+        </div>
+      </div>
+      <div class="ct-socs">
+        <a href="https://github.com/athul" target="_blank" class="ct-soc">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="ct-soc">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://twitter.com" target="_blank" class="ct-soc">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="cf sr-right" style="transition-delay:.2s">
+      <div class="cf-glow"></div>
+      <div id="cfMain">
+        <div class="cf-row">
+          <div class="fg">
+            <label class="fl">Your Name</label>
+            <input type="text" id="cfn" class="fi" placeholder="John Doe"/>
+          </div>
+          <div class="fg">
+            <label class="fl">Email Address</label>
+            <input type="email" id="cfe" class="fi" placeholder="john@example.com"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Subject</label>
+          <input type="text" id="cfs" class="fi" placeholder="Project inquiry / Collaboration"/>
+        </div>
+        <div class="fg">
+          <label class="fl">Message</label>
+          <textarea id="cfm" class="fta" placeholder="Hi Athul, I'd love to discuss..."></textarea>
+        </div>
+        <button type="button" class="cf-btn" id="cfBtn" onclick="sendForm()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <span id="cfBtnTxt">Send Message</span>
+        </button>
+      </div>
+      <div class="cf-ok" id="cfOk">
+        <div class="cf-ok-ico">🎉</div>
+        <div class="cf-ok-ttl">Message Sent!</div>
+        <div class="cf-ok-p">Thanks for reaching out. I'll get back to you within 24 hours.</div>
+        <button onclick="resetForm()" class="btn btn-o" style="margin-top:14px;font-size:.7rem;padding:10px 22px">Send Another</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-in">
+    <div class="ft-copy">Designed &amp; built by <span>Athul</span> · © 2025</div>
+    <nav class="ft-nav">
+      <a href="#hero">Home</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ─── Particle Canvas ─── */
+(function(){
+  const c = document.getElementById('canvas');
+  const ctx = c.getContext('2d');
+  let W, H, pts = [];
+  function resize(){ W=c.width=innerWidth; H=c.height=innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  class Pt{
+    constructor(){this.reset()}
+    reset(){
+      this.x=Math.random()*W; this.y=Math.random()*H;
+      this.vx=(Math.random()-.5)*.25; this.vy=(Math.random()-.5)*.25;
+      this.r=Math.random()*1.2+.3;
+      this.a=Math.random()*.6+.1;
+    }
+    update(){ this.x+=this.vx; this.y+=this.vy;
+      if(this.x<0||this.x>W||this.y<0||this.y>H) this.reset(); }
+  }
+  for(let i=0;i<90;i++) pts.push(new Pt());
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(167,139,250,${p.a})`;ctx.fill();
+      p.update();
+    });
+    // connections
+    for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<110){
+        ctx.beginPath();
+        ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(124,58,237,${.08*(1-d/110)})`;
+        ctx.lineWidth=.6;ctx.stroke();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ─── Cursor ─── */
+const ca=document.getElementById('cur-a'), cb=document.getElementById('cur-b');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;ca.style.left=mx+'px';ca.style.top=my+'px';});
+(function raf(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;cb.style.left=rx+'px';cb.style.top=ry+'px';requestAnimationFrame(raf);})();
+document.querySelectorAll('a,button,.pj-card,.sk-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+
+/* ─── Loader ─── */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('gone');
+    document.querySelectorAll('#hero .sr, #hero .sr-left, #hero .sr-right').forEach(el=>el.classList.add('vis'));
+    setTimeout(startTyping, 200);
+    setTimeout(startCounters, 500);
+  }, 2100);
+});
+
+/* ─── Sticky nav ─── */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',scrollY>40);
+  document.getElementById('btt').classList.toggle('on',scrollY>400);
+});
+
+/* ─── Typing ─── */
+const phrases=['Full Stack Developer','MERN Stack Builder','React + Node Dev','Problem Solver 🧩','Always Shipping 🚀'];
+let pi=0,ci=0,del=false;
+const tel=document.getElementById('hTyped');
+function startTyping(){
+  (function t(){
+    const cur=phrases[pi];
+    tel.textContent=del?cur.slice(0,ci-1):cur.slice(0,ci+1);
+    del?ci--:ci++;
+    let sp=del?55:90;
+    if(!del&&ci===cur.length){sp=1800;del=true;}
+    else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;sp=350;}
+    setTimeout(t,sp);
+  })();
+}
+
+/* ─── Scroll reveal ─── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.sr:not(#hero .sr),.sr-left,.sr-right').forEach(el=>obs.observe(el));
+
+/* ─── Skill bars ─── */
+const skObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting)
+      e.target.querySelectorAll('.sk-fill').forEach(b=>setTimeout(()=>b.style.width=b.dataset.w+'%',150));
+  });
+},{threshold:.3});
+document.querySelectorAll('.sk-card').forEach(c=>skObs.observe(c));
+
+/* ─── Counter animation ─── */
+function startCounters(){
+  [[sn1,12],[sn2,8],[sn3,6]].forEach(([id,target])=>{
+    let v=0;const iv=setInterval(()=>{
+      v+=target/80;
+      document.getElementById(id).textContent=Math.min(Math.floor(v),target);
+      if(v>=target)clearInterval(iv);
+    },18);
+  });
+}
+
+/* ─── Mobile nav ─── */
+function openNav(){document.getElementById('mPanel').classList.add('open');document.getElementById('mOverlay').classList.add('open');}
+function closeNav(){document.getElementById('mPanel').classList.remove('open');document.getElementById('mOverlay').classList.remove('open');}
+
+/* ─── Contact form ─── */
+async function sendForm(){
+  const n=document.getElementById('cfn').value.trim();
+  const e=document.getElementById('cfe').value.trim();
+  const m=document.getElementById('cfm').value.trim();
+  if(!n||!e||!m){
+    [document.getElementById('cfn'),document.getElementById('cfe'),document.getElementById('cfm')].forEach(el=>{
+      if(!el.value.trim()){el.style.borderColor='var(--red-acc)';setTimeout(()=>el.style.borderColor='',2200);}
+    });
+    return;
+  }
+  const btn=document.getElementById('cfBtn');
+  document.getElementById('cfBtnTxt').textContent='Sending…';
+  btn.disabled=true;
+  try{
+    /* ⚠️ Replace with your Render backend URL after deployment */
+    await fetch('https://athul-portfolio-api.onrender.com/api/contact',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:n,email:e,subject:document.getElementById('cfs').value.trim()||'Portfolio Contact',message:m})
+    });
+  }catch(_){}
+  document.getElementById('cfMain').style.display='none';
+  document.getElementById('cfOk').classList.add('on');
+}
+function resetForm(){
+  ['cfn','cfe','cfs','cfm'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cfBtn').disabled=false;
+  document.getElementById('cfBtnTxt').textContent='Send Message';
+  document.getElementById('cfMain').style.display='block';
+  document.getElementById('cfOk').classList.remove('on');
+}
+
+/* ─── Resume download ─── */
+function dlResume(e){
+  e.preventDefault();
+  const txt=`ATHUL
+Full Stack Developer | India
+GitHub: github.com/athul | Email: athul@example.com
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SUMMARY
+Aspiring Full Stack Developer from India, passionate about web development,
+software engineering, and modern technologies. Dedicated to building real-world
+applications using the MERN stack with clean, maintainable code.
+
+TECH STACK
+Frontend : HTML5, CSS3, JavaScript, React.js
+Backend  : Node.js, Express.js
+Database : MongoDB, Mongoose
+Tools    : Git, GitHub, VS Code, Vercel, Render, MongoDB Atlas
+
+PROJECTS
+─────────────────────────────────────
+1. Personal Portfolio Website
+   GitHub : github.com/athul/portfolio-website
+   Live   : athul-portfolio.vercel.app
+   Tech   : HTML, CSS, JS, Node.js, Express, MongoDB
+
+2. Task Management Application
+   GitHub : github.com/athul/task-manager
+   Live   : athul-tasks.vercel.app
+   Tech   : React, Node.js, Express, MongoDB, JWT
+
+3. Student Management System
+   GitHub : github.com/athul/student-management
+   Live   : athul-sms.vercel.app
+   Tech   : HTML/CSS/JS, Node.js, Express, MongoDB, Chart.js
+
+EDUCATION
+B.Tech / BCA / BSc Computer Science (In Progress) | India
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Generated from: athul-portfolio.vercel.app`;
+  const b=new Blob([txt],{type:'text/plain'});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement('a');
+  a.href=u;a.download='Athul_Resume.txt';a.click();
+  URL.revokeObjectURL(u);
+}
+
+/* ─── Smooth scroll ─── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+scrollY-65,behavior:'smooth'});}
+  });
+});
+</script>
+</body>
+</html>
